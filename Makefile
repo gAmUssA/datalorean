@@ -97,24 +97,8 @@ run: ## ▶️  Start all services and the application
 	fi
 	@printf "${GREEN}✅ Kafka initialized successfully${RESET}\n"
 	@printf '${YELLOW}Initializing MinIO...${RESET}\n'
-	@for i in {1..10}; do \
-		if docker run --rm --network host minio/mc alias set local http://localhost:9000 minioadmin minioadmin >/dev/null 2>&1; then \
-			printf "${GREEN}✓${RESET} MinIO client configured\n"; \
-			break; \
-		fi; \
-		if [ $$i -eq 10 ]; then \
-			printf "${RED}❌ Failed to configure MinIO client${RESET}\n"; \
-			exit 1; \
-		fi; \
-		printf "${YELLOW}⏳ Waiting for MinIO to be ready ($$i/10)${RESET}\r"; \
-		sleep 2; \
-	done
-	@printf "${YELLOW}Creating warehouse bucket...${RESET}\n"
-	@docker run --rm --network host minio/mc mb local/warehouse >/dev/null 2>&1 || \
-		printf "${YELLOW}ℹ️  Bucket 'warehouse' already exists${RESET}\n"
-	@printf "${YELLOW}Setting bucket policy...${RESET}\n"
-	@docker run --rm --network host minio/mc policy set public local/warehouse >/dev/null 2>&1 || \
-		(printf "${RED}❌ Failed to set bucket policy${RESET}\n" && exit 1)
+	@chmod +x scripts/init-minio.sh
+	@./scripts/init-minio.sh
 	@printf "${GREEN}✅ MinIO initialized successfully${RESET}\n"
 	@printf '${BLUE}▶️  Starting application...${RESET}\n'
 	@$(GRADLE) bootRun & \
@@ -179,11 +163,11 @@ verify: ## ✅ Verify system requirements and configuration
 	@printf '\n${YELLOW}1. Required Tools${RESET}\n'
 	@# Check Java
 	@printf "Checking Java...            "
-	@if java -version 2>&1 | head -n 1 | grep -q 'version "23'; then \
+	@if java -version 2>&1 | head -n 1 | grep -q 'version "21'; then \
 		VERSION=$$(java -version 2>&1 | head -n 1 | awk -F '"' '{print $$2}'); \
 		printf "${GREEN}✓${RESET} (v$$VERSION)\n"; \
 	else \
-		printf "${RED}❌ Java 23 is required${RESET}\n" && exit 1; \
+		printf "${RED}❌ Java 21 is required${RESET}\n" && exit 1; \
 	fi
 	@# Check Docker
 	@printf "Checking Docker...          "

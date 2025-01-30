@@ -35,6 +35,8 @@ The project is organized as an IntelliJ IDEA project with the following structur
    - Document all public APIs
    - Keep documentation up-to-date
    - Include examples where appropriate
+   - use AsciiDoc for documentation
+   - use one sentence per line rule
 
 4. **Testing**
    - Write unit tests for new features

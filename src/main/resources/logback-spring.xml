@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+    <!-- Application Logging -->
+    <logger name="com.example.datadelorean" level="DEBUG"/>
+
+    <!-- Flink Logging -->
+    <logger name="org.apache.flink" level="INFO"/>
+    <logger name="org.apache.flink.runtime.rest" level="WARN"/>
+    <logger name="org.apache.flink.runtime.dispatcher" level="INFO"/>
+    <logger name="org.apache.flink.runtime.checkpoint" level="INFO"/>
+    <logger name="org.apache.flink.runtime.executiongraph" level="INFO"/>
+    <logger name="org.apache.flink.runtime.jobmaster" level="INFO"/>
+    <logger name="org.apache.flink.runtime.taskexecutor" level="INFO"/>
+    <logger name="org.apache.flink.streaming" level="INFO"/>
+    <logger name="org.apache.flink.api" level="INFO"/>
+
+    <!-- Kafka Logging -->
+    <logger name="org.apache.kafka" level="INFO"/>
+    <logger name="org.apache.kafka.clients.consumer" level="INFO"/>
+    <logger name="org.apache.kafka.clients.producer" level="INFO"/>
+
+    <!-- Iceberg Logging -->
+    <logger name="org.apache.iceberg" level="INFO"/>
+
+    <!-- Hadoop Logging -->
+    <logger name="org.apache.hadoop" level="WARN"/>
+    <logger name="com.amazonaws" level="WARN"/>
+
+    <!-- Spring Logging -->
+    <logger name="org.springframework" level="INFO"/>
+    <logger name="org.springframework.kafka" level="INFO"/>
+</configuration>

@@ -19,6 +19,7 @@ repositories {
     maven { url = uri("https://repository.apache.org/content/repositories/snapshots/") }
     maven { url = uri("https://repository.apache.org/content/repositories/releases/") }
     maven { url = uri("https://repo.maven.apache.org/maven2") }
+    maven { url = uri("https://packages.iceberg.apache.org/maven") }
 }
 
 dependencies {
@@ -29,11 +30,18 @@ dependencies {
     // Apache Flink
     implementation("org.apache.flink:flink-streaming-java:1.20.0") {
         exclude(group = "org.apache.flink", module = "flink-shaded-force-shading")
+        exclude(group = "org.slf4j", module = "slf4j-reload4j")
+        exclude(group = "log4j", module = "log4j")
+        exclude(group = "org.apache.logging.log4j", module = "log4j-to-slf4j")
     }
-    implementation("org.apache.flink:flink-clients_2.12:1.20.0")
-    implementation("org.apache.flink:flink-sql-connector-kafka_2.12:1.20.0")
+    implementation("org.apache.flink:flink-clients:1.20.0") {
+        exclude(group = "org.slf4j", module = "slf4j-reload4j")
+    }
+    implementation("org.apache.flink:flink-connector-kafka:3.4.0-1.20")
     implementation("org.apache.flink:flink-json:1.20.0")
-    implementation("org.apache.flink:flink-runtime:1.20.0")
+    implementation("org.apache.flink:flink-runtime:1.20.0") {
+        exclude(group = "org.slf4j", module = "slf4j-reload4j")
+    }
     implementation("org.apache.flink:flink-table-common:1.20.0")
     implementation("org.apache.flink:flink-core:1.20.0")
     implementation("org.apache.flink:flink-connector-base:1.20.0")
@@ -41,26 +49,32 @@ dependencies {
     implementation("org.apache.flink:flink-table-api-java-bridge:1.20.0")
     implementation("org.apache.flink:flink-table-runtime:1.20.0")
 
-    // Flink Iceberg
-    implementation("org.apache.iceberg:iceberg-flink:1.4.2")
-    implementation("org.apache.iceberg:iceberg-api:1.4.2")
-    implementation("org.apache.iceberg:iceberg-common:1.4.2")
-    implementation("org.apache.iceberg:iceberg-core:1.4.2")
-    implementation("org.apache.iceberg:iceberg-data:1.4.2")
-    implementation("org.apache.iceberg:iceberg-flink-runtime-1.20:1.4.2")
-    implementation("org.apache.iceberg:iceberg-bundled-guava:1.4.2")
+    // Apache Iceberg and Flink Integration
+    implementation("org.apache.iceberg:iceberg-core:1.7.1")
+    implementation("org.apache.iceberg:iceberg-api:1.7.1")
+    implementation("org.apache.iceberg:iceberg-common:1.7.1")
+    implementation("org.apache.iceberg:iceberg-data:1.7.1")
+    implementation("org.apache.iceberg:iceberg-aws:1.7.1")
+    implementation("org.apache.iceberg:iceberg-bundled-guava:1.7.1")
+    implementation("org.apache.iceberg:iceberg-parquet:1.7.1")
+    implementation("org.apache.iceberg:iceberg-flink:1.7.1")
+    implementation("org.apache.iceberg:iceberg-flink-runtime-1.20:1.7.1")
 
     // Apache Kafka
     implementation("org.apache.kafka:kafka-clients:3.6.1")
     implementation("org.springframework.kafka:spring-kafka")
 
-    // Apache Iceberg
-    implementation("org.apache.iceberg:iceberg-aws:1.4.3")
-
     // Hadoop and AWS
-    implementation("org.apache.hadoop:hadoop-common:3.3.6")
-    implementation("org.apache.hadoop:hadoop-aws:3.3.6")
-    implementation("com.amazonaws:aws-java-sdk-s3:1.12.543")
+    implementation("org.apache.hadoop:hadoop-common:3.3.6") {
+        exclude(group = "org.slf4j", module = "slf4j-reload4j")
+        exclude(group = "log4j", module = "log4j")
+        exclude(group = "commons-logging", module = "commons-logging")
+    }
+    implementation("org.apache.hadoop:hadoop-aws:3.3.6") {
+        exclude(group = "commons-logging", module = "commons-logging")
+    }
+    implementation("software.amazon.awssdk:s3:2.20.68")
+    implementation("software.amazon.awssdk:sts:2.20.68")
 
     // Testing
     testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -72,13 +86,13 @@ dependencies {
 
     // Test Runtime
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
-    testRuntimeOnly("ch.qos.logback:logback-classic")
 
     // Monitoring
     implementation("io.micrometer:micrometer-registry-prometheus")
 
     // Logging
     implementation("ch.qos.logback:logback-classic")
+    implementation("org.slf4j:jcl-over-slf4j:2.0.9")
 }
 
 tasks.withType<Test> {

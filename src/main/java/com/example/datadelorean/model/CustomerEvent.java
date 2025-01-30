@@ -1,11 +1,18 @@
 package com.example.datadelorean.model;
 
+import com.example.datadelorean.serialization.CustomerEventTypeInfoFactory;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.apache.flink.api.common.typeinfo.TypeInfo;
+
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CustomerEvent {
+@TypeInfo(CustomerEventTypeInfoFactory.class)
+public class CustomerEvent implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     private UUID eventId;
     private String customerId;
     private String eventType;

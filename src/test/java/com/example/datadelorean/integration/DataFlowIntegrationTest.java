@@ -1,5 +1,6 @@
 package com.example.datadelorean.integration;
 
+import com.example.datadelorean.config.IcebergTestConfig;
 import com.example.datadelorean.config.TestConfig;
 import com.example.datadelorean.model.CustomerEvent;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -31,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Testcontainers
 @EmbeddedKafka(partitions = 1, topics = {"customer-events", "analytical-insights"})
-@Import(TestConfig.class)
+@Import({TestConfig.class, IcebergTestConfig.class})
 class DataFlowIntegrationTest {
 
     @Container
@@ -115,7 +116,7 @@ class DataFlowIntegrationTest {
         // Verify Iceberg table
         assertTrue(customerEventsTable.currentSnapshot() != null, 
             "Event should be written to Iceberg");
-        
+
         System.out.println("[DEBUG_LOG] Iceberg table verification completed");
     }
 }

@@ -13,9 +13,15 @@ if ! command -v java &> /dev/null; then
     echo -e "${RED}❌ Java is not installed${NC}"
     exit 1
 else
-    java_version=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}' | awk -F '.' '{print $1}')
-    if [ "$java_version" -lt "23" ]; then
-        echo -e "${RED}❌ Java 23 or later is required (found version $java_version)${NC}"
+    # Get Java version and ensure it's a number
+    java_version=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}' | cut -d'.' -f1)
+    if [[ ! "$java_version" =~ ^[0-9]+$ ]]; then
+        echo -e "${RED}❌ Could not determine Java version${NC}"
+        exit 1
+    fi
+
+    if [ "$java_version" -lt "21" ]; then
+        echo -e "${RED}❌ Java 21 or later is required (found version $java_version)${NC}"
         exit 1
     else
         echo -e "${GREEN}✅ Java $java_version is installed${NC}"
@@ -60,6 +66,18 @@ if ! docker info &> /dev/null; then
     exit 1
 else
     echo -e "${GREEN}✅ Docker daemon is running${NC}"
+fi
+
+# Check AWS CLI
+if ! command -v aws &> /dev/null; then
+    echo -e "${RED}❌ AWS CLI is not installed${NC}"
+    echo -e "${YELLOW}Please install AWS CLI:${NC}"
+    echo -e "${YELLOW}- macOS: brew install awscli${NC}"
+    echo -e "${YELLOW}- Linux: sudo apt-get install awscli${NC}"
+    echo -e "${YELLOW}- Windows: https://aws.amazon.com/cli/${NC}"
+    exit 1
+else
+    echo -e "${GREEN}✅ AWS CLI is installed${NC}"
 fi
 
 echo -e "${GREEN}✅ All prerequisites are satisfied!${NC}"

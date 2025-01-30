@@ -66,8 +66,8 @@ make restart      # Restart all services
 1. Clone the repository:
 [source,bash]
 ----
-git clone https://github.com/yourusername/data-delorean.git
-cd data-delorean
+git clone https://github.com/gamussa/datalorean.git
+cd datalorean
 ----
 
 2. Setup and start the project:
@@ -179,6 +179,66 @@ data-delorean/
 ├── build.gradle.kts
 └── README.adoc
 ----
+
+== S3 Storage Configuration
+
+The project supports storing Iceberg tables in S3-compatible storage solutions (like MinIO, AWS S3, etc.).
+
+=== Configuration Properties
+
+Configure the following properties in `application.yml`:
+
+[source,yaml]
+----
+iceberg:
+  warehouse: s3a://warehouse/
+  s3:
+    endpoint: http://localhost:9000      # S3 endpoint URL
+    access-key-id: minioadmin           # S3 access key
+    secret-access-key: minioadmin       # S3 secret key
+    path-style-access: true             # Enable path-style access
+----
+
+=== Using with Different S3 Storage Solutions
+
+==== MinIO (Local Development)
+
+1. MinIO is included in the docker-compose setup
+2. Access the MinIO console at http://localhost:9001
+3. Default credentials: minioadmin/minioadmin
+
+==== Amazon S3
+
+To use with Amazon S3:
+
+1. Update the endpoint to your S3 region endpoint
+2. Provide AWS credentials
+3. Set path-style-access to false
+
+[source,yaml]
+----
+iceberg:
+  warehouse: s3a://your-bucket/
+  s3:
+    endpoint: https://s3.amazonaws.com
+    access-key-id: your-access-key
+    secret-access-key: your-secret-key
+    path-style-access: false
+----
+
+==== Other S3-Compatible Storage
+
+For other S3-compatible storage solutions:
+
+1. Update the endpoint to your storage service URL
+2. Configure appropriate credentials
+3. Set path-style-access according to your storage service requirements
+
+=== Security Considerations
+
+1. Never commit credentials to version control
+2. Use environment variables or secure secrets management
+3. For production, consider using IAM roles or similar authentication mechanisms
 
 == Demo Scenarios
 

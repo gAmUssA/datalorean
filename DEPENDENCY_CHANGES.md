@@ -11,7 +11,7 @@
 - Maintained other essential repositories including Maven Central and Apache repositories
 
 ### 3. Dependency Versions
-- Updated Apache Iceberg dependencies to version 1.4.2
+- Updated Apache Iceberg dependencies to version 1.7.1
 - Aligned Flink dependencies to version 1.20.0
 - Updated Flink Kafka connector to match Flink version
 
