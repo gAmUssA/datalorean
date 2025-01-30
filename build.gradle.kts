@@ -9,12 +9,16 @@ group = "com.example"
 version = "0.0.1-SNAPSHOT"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_23
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 repositories {
     mavenCentral()
     maven { url = uri("https://packages.confluent.io/maven/") }
+    maven { url = uri("https://repository.apache.org/content/repositories/snapshots/") }
+    maven { url = uri("https://repository.apache.org/content/repositories/releases/") }
+    maven { url = uri("https://repo.maven.apache.org/maven2") }
 }
 
 dependencies {
@@ -26,32 +30,31 @@ dependencies {
     implementation("org.apache.flink:flink-streaming-java:1.20.0") {
         exclude(group = "org.apache.flink", module = "flink-shaded-force-shading")
     }
-    implementation("org.apache.flink:flink-clients:1.20.0")
-    implementation("org.apache.flink:flink-connector-kafka:1.20.0")
+    implementation("org.apache.flink:flink-clients_2.12:1.20.0")
+    implementation("org.apache.flink:flink-sql-connector-kafka_2.12:1.20.0")
     implementation("org.apache.flink:flink-json:1.20.0")
     implementation("org.apache.flink:flink-runtime:1.20.0")
     implementation("org.apache.flink:flink-table-common:1.20.0")
     implementation("org.apache.flink:flink-core:1.20.0")
     implementation("org.apache.flink:flink-connector-base:1.20.0")
-    implementation("org.apache.flink:flink-connector-kafka_2.12:1.20.0")
-    implementation("org.apache.flink:flink-json_2.12:1.20.0")
+    implementation("org.apache.flink:flink-table-api-java:1.20.0")
+    implementation("org.apache.flink:flink-table-api-java-bridge:1.20.0")
     implementation("org.apache.flink:flink-table-runtime:1.20.0")
 
     // Flink Iceberg
-    implementation("org.apache.iceberg:iceberg-flink-runtime-1.20:1.4.3")
-    implementation("org.apache.iceberg:iceberg-flink:1.4.3")
-    implementation("org.apache.iceberg:iceberg-api:1.4.3")
-    implementation("org.apache.iceberg:iceberg-common:1.4.3")
-    implementation("org.apache.iceberg:iceberg-core:1.4.3")
-    implementation("org.apache.iceberg:iceberg-data:1.4.3")
+    implementation("org.apache.iceberg:iceberg-flink:1.4.2")
+    implementation("org.apache.iceberg:iceberg-api:1.4.2")
+    implementation("org.apache.iceberg:iceberg-common:1.4.2")
+    implementation("org.apache.iceberg:iceberg-core:1.4.2")
+    implementation("org.apache.iceberg:iceberg-data:1.4.2")
+    implementation("org.apache.iceberg:iceberg-flink-runtime-1.20:1.4.2")
+    implementation("org.apache.iceberg:iceberg-bundled-guava:1.4.2")
 
     // Apache Kafka
     implementation("org.apache.kafka:kafka-clients:3.6.1")
     implementation("org.springframework.kafka:spring-kafka")
 
     // Apache Iceberg
-    implementation("org.apache.iceberg:iceberg-core:1.4.3")
-    implementation("org.apache.iceberg:iceberg-flink:1.4.3")
     implementation("org.apache.iceberg:iceberg-aws:1.4.3")
 
     // Hadoop and AWS
