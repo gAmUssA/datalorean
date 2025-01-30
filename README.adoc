@@ -1,0 +1,309 @@
+= Data DeLorean: Bi-directional Data Flow Demo
+:toc:
+:toc-placement!:
+:source-highlighter: highlight.js
+:icons: font
+
+image:https://img.shields.io/badge/Java-23-orange[Java Version]
+image:https://img.shields.io/badge/Spring%20Boot-3.2.2-green[Spring Boot Version]
+image:https://img.shields.io/badge/Apache%20Flink-1.20.0-blue[Flink Version]
+
+toc::[]
+
+== Overview
+
+Data DeLorean is a demonstration project showcasing bi-directional data flow between Apache Kafka and Apache Iceberg. The project illustrates how data can seamlessly flow between streaming and analytical systems, enabling real-time data processing and analytics.
+
+== Features
+
+* Real-time customer events streaming from Kafka to Iceberg
+* Analytical insights flowing from Iceberg back to Kafka
+* Schema evolution handling
+* Comprehensive monitoring and metrics
+* Local development environment with Docker Compose
+
+== Technology Stack
+
+* Java 23
+* Spring Boot 3.2.2
+* Apache Flink 1.20.0
+* Apache Kafka (KRaft mode)
+* Apache Iceberg
+* TestContainers
+* Gradle with Kotlin
+* Docker & Docker Compose
+
+== Quick Start
+
+=== Prerequisites
+
+* Java 23 or later
+* Docker and Docker Compose
+* Make
+* Gradle 8.5 or later
+
+=== Available Make Commands
+
+The project includes a Makefile with colorful output to help you manage common tasks:
+
+[source,bash]
+----
+make help          # Show all available commands
+make setup         # Setup local development environment
+make build         # Build the project
+make run          # Start all services and the application
+make stop         # Stop all services
+make clean        # Clean up all resources
+make test         # Run tests
+make demo         # Run demo scenarios
+make monitor      # Show monitoring dashboard URLs
+make logs         # View application logs
+make restart      # Restart all services
+----
+
+=== Getting Started
+
+1. Clone the repository:
+[source,bash]
+----
+git clone https://github.com/yourusername/data-delorean.git
+cd data-delorean
+----
+
+2. Setup and start the project:
+[source,bash]
+----
+make setup        # Pull required Docker images
+make build        # Build the application
+make run          # Start all services
+----
+
+3. Run demo scenarios:
+[source,bash]
+----
+make demo         # Execute all demo scenarios
+----
+
+4. Monitor the application:
+[source,bash]
+----
+make monitor      # Show monitoring URLs
+make logs         # View application logs
+----
+
+5. Clean up:
+[source,bash]
+----
+make clean        # Stop all services and clean up
+----
+
+== Development Workflow
+
+=== Typical Development Cycle
+
+1. *Start Development Environment*
+[source,bash]
+----
+make setup        # First time setup
+make run          # Start all services
+----
+
+2. *Make Changes*
+* Edit code in your preferred IDE
+* Use hot-reload for faster development
+* Follow the package structure
+
+3. *Test Changes*
+[source,bash]
+----
+make test         # Run all tests
+make demo         # Run demo scenarios
+make check-status # Verify all services
+----
+
+4. *Monitor & Debug*
+[source,bash]
+----
+make monitor      # Access monitoring dashboards
+make logs         # Check application logs
+----
+
+5. *Iterate & Restart*
+[source,bash]
+----
+make restart      # Restart services if needed
+----
+
+=== Best Practices
+
+1. *Code Organization*
+* Follow the package structure
+* Keep components focused and small
+* Add comprehensive tests
+
+2. *Data Flow*
+* Use schema evolution for compatibility
+* Monitor data flow with metrics
+* Handle errors gracefully
+
+3. *Testing*
+* Write integration tests for flows
+* Use TestContainers for dependencies
+* Test both success and failure cases
+
+4. *Monitoring*
+* Check metrics regularly
+* Set up alerts for issues
+* Monitor data quality
+
+== Project Structure
+
+[source]
+----
+data-delorean/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/example/datadelorean/
+│   │   │       ├── config/        # Configuration classes
+│   │   │       ├── model/         # Domain models
+│   │   │       ├── flink/         # Flink job configurations
+│   │   │       ├── kafka/         # Kafka producers/consumers
+│   │   │       ├── iceberg/       # Iceberg configurations
+│   │   │       └── demo/          # Demo scenarios
+│   │   └── resources/
+│   └── test/
+├── config/
+│   └── prometheus/                # Prometheus configuration
+├── docker-compose.yml
+├── build.gradle.kts
+└── README.adoc
+----
+
+== Demo Scenarios
+
+=== 1. Customer Events Flow (Kafka → Iceberg)
+
+This scenario demonstrates real-time customer event processing:
+
+* Event generation
+* Stream processing with Flink
+* Storage in Iceberg tables
+
+=== 2. Analytical Insights Flow (Iceberg → Kafka)
+
+This scenario shows how to:
+
+* Query Iceberg tables
+* Process analytical results
+* Stream insights back to Kafka
+
+== Monitoring
+
+The project includes comprehensive monitoring:
+
+* Prometheus metrics
+* Spring Boot Actuator endpoints
+* Flink metrics
+
+Access the monitoring interfaces:
+
+* Prometheus: http://localhost:9090
+* Spring Boot Actuator: http://localhost:8080/actuator
+* MinIO Console: http://localhost:9001
+
+== Testing
+
+=== Running Tests
+
+[source,bash]
+----
+./gradlew test
+----
+
+=== Integration Tests
+
+The project uses TestContainers for integration testing:
+
+[source,bash]
+----
+./gradlew integrationTest
+----
+
+== Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Submit a pull request
+
+== Troubleshooting
+
+=== Common Issues
+
+==== Service Status Check
+Use the status check command to verify all services are running properly:
+[source,bash]
+----
+make check-status
+----
+
+This will show the status of:
+* Docker containers
+* Application health
+* Kafka topics
+* MinIO connection
+
+==== Known Issues and Solutions
+
+1. *Kafka Connection Issues*
+* *Symptom*: Cannot connect to Kafka
+* *Solution*: Check if Kafka is running and accessible:
+[source,bash]
+----
+make check-status
+make logs  # Check Kafka logs specifically
+----
+
+2. *MinIO Connection Issues*
+* *Symptom*: Cannot access MinIO or Iceberg tables
+* *Solution*: Verify MinIO is running and credentials are correct:
+[source,bash]
+----
+make check-status
+make logs  # Look for MinIO-related errors
+----
+
+3. *Application Won't Start*
+* *Symptom*: Spring Boot application fails to start
+* *Solution*: Check prerequisites and logs:
+[source,bash]
+----
+./scripts/check-prerequisites.sh
+make logs
+----
+
+=== Debugging Tips
+
+1. Use the monitoring dashboards:
+[source,bash]
+----
+make monitor  # Shows URLs for monitoring tools
+----
+
+2. Check specific component logs:
+[source,bash]
+----
+docker-compose logs kafka    # Kafka logs
+docker-compose logs minio    # MinIO logs
+----
+
+3. Restart specific components:
+[source,bash]
+----
+docker-compose restart kafka  # Restart only Kafka
+make restart                  # Restart everything
+----
+
+== License
+
+This project is licensed under the MIT License - see the LICENSE file for details.

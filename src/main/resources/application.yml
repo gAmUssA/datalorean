@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: data-delorean
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: data-delorean-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+
+iceberg:
+  warehouse: s3a://warehouse/
+  s3:
+    endpoint: http://localhost:9000
+    access-key-id: minioadmin
+    secret-access-key: minioadmin
+    path-style-access: true
+
+flink:
+  job:
+    checkpointing:
+      interval: 10000
+      mode: EXACTLY_ONCE
+    parallelism: 1
+
+demo:
+  kafka:
+    topics:
+      customer-events: customer-events
+      analytical-insights: analytical-insights
+  generator:
+    enabled: true
+    interval-ms: 1000
